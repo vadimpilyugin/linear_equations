@@ -17,29 +17,29 @@ mkdir -p $MATR_DIR $VECT_DIR $RESULT
 source ./config.cfg
 
 # Программируем программу выдачи граничных значений и параметров
-cat <<Input >${INCLUDE}/params.h
-#pragma once
-extern const char *matrix_f;
-extern const char *vector_f;
-extern const char *result_f;
-extern const bool matrix_gen;
-extern const int rows_gen;
-extern const int cols_gen;
-extern const int debug;
-extern const double eps;
-Input
+# cat <<Input >${INCLUDE}/params.h
+# #pragma once
+# extern const char *matrix_f;
+# extern const char *vector_f;
+# extern const char *result_f;
+# extern const bool matrix_gen;
+# extern const int rows_gen;
+# extern const int cols_gen;
+# extern const int debug;
+# extern const double eps;
+# Input
 
-cat <<Input >${SRC}/params.cpp
-#include "params.h"
-const char *matrix_f = "$matrix_f";
-const char *vector_f = "$vector_f";
-const char *result_f = "$result_f";
-const bool matrix_gen = $matrix_gen;
-const int rows_gen = $rows_gen;
-const int cols_gen = $cols_gen;
-const int debug = $debug;
-const double eps = 1e-7;
-Input
+# cat <<Input >${SRC}/params.cpp
+# #include "params.h"
+# const char *matrix_f = "$matrix_f";
+# const char *vector_f = "$vector_f";
+# const char *result_f = "$result_f";
+# const bool matrix_gen = $matrix_gen;
+# const int rows_gen = $rows_gen;
+# const int cols_gen = $cols_gen;
+# const int debug = $debug;
+# const double eps = 1e-7;
+# Input
 
 # Компиляция и запуск программы
 make all 1>/dev/null

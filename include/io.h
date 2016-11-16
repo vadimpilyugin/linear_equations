@@ -8,5 +8,3 @@ using namespace std;
 Matrix<double> generate_matrix(int rows, int cols);
 Matrix<double> load_matrix(string filename);
 void write_matrix(string filename, const Matrix<double> &result);
-
-#include "io.hpp"

@@ -32,7 +32,7 @@ public:
 	Solution(sol_type _t, Matrix<double> _f, Matrix<double> _a, std::stack<vector<int>> _st, int free = 0);
 	Solution(sol_type _t): t(_t), free_var_num(0) {}
 	void print() const;
-	double operator[] (int i) const { return sol(i, 0); }
+	double operator[] (int i) const { return sol[i]; }
 	void recalculate();
 	bool test_sol(const Matrix<double> &a1, const Matrix<double> &f1) const;
 	Matrix<double> result() const {return sol;}

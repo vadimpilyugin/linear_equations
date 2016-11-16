@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -O2 -g -Wall -std=c++0x
+CXXFLAGS = -O0 -g -Wall -std=c++11
 
 # Strict compiler options
 CXXFLAGS +=
@@ -53,10 +53,10 @@ deps.mk:
 	echo '-include $(call src_to_dep, $(CXXFILES))' >deps.mk
 
 # Rules for compiling targets
-$(BIN_DIR)/matrix_example: $(OBJ_DIR)/matrix_example.o $(OBJ_DIR)/slau.o $(OBJ_DIR)/solution.o $(OBJ_DIR)/params.o
+$(BIN_DIR)/matrix_example: $(OBJ_DIR)/matrix_example.o $(OBJ_DIR)/slau.o $(OBJ_DIR)/solution.o $(OBJ_DIR)/params.o $(OBJ_DIR)/io.o
 	$(CXX) $(CXXFLAGS) $(filter %.o, $^) -o $@ $(LDFLAGS)
 
-$(BIN_DIR)/solve: $(OBJ_DIR)/main.o $(OBJ_DIR)/slau.o $(OBJ_DIR)/solution.o $(OBJ_DIR)/params.o
+$(BIN_DIR)/solve: $(OBJ_DIR)/main.o $(OBJ_DIR)/slau.o $(OBJ_DIR)/solution.o $(OBJ_DIR)/params.o $(OBJ_DIR)/io.o
 	$(CXX) $(CXXFLAGS) $(filter %.o, $^) -o $@ $(LDFLAGS)
 
 # Pattern for generating dependency description files (*.d)

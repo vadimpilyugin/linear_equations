@@ -13,7 +13,7 @@ class Slau
 	Matrix<double> a, f;
 	std::stack<vector<int>> st; // стек перестановок столбцов
 public:
-	Slau(const Matrix<double> _a, const Matrix<double> _f): a(_a), f(_f) {}
+	Slau(const Matrix<double> _a, const Matrix<double> _f) {a = _a.deep_copy(); f = _f.deep_copy(); }
 	void print() const;
 	Solution gauss();
 private:

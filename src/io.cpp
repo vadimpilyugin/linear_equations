@@ -1,6 +1,10 @@
+#include "io.h"
+#include "params.h"
+
 #include <chrono>
 #include <random>
 #include <fstream>
+using namespace std;
 
 Matrix<double> generate_matrix(int rows, int cols)
 {
@@ -19,9 +23,16 @@ Matrix<double> generate_matrix(int rows, int cols)
 Matrix<double> load_matrix(string filename)
 {
 	ifstream matr(filename);
+	if(!matr.is_open())
+	{
+		fprintf(stderr, "%s\n", "Файл не может быть открыт!");
+		throw -1;
+	}
+	if(debug) printf("Имя файла матрицы: %s\n", filename.c_str());
 	int rows, cols;
 	matr >> rows >> cols;
-	Matrix<double> result;
+	if(debug) printf("Размеры: %dx%d\n", rows, cols);
+	Matrix<double> result(rows, cols);
 	for(int i = 0; i < rows; i++)
 		for(int j = 0; j < cols; j++)
 			matr >> result(i, j);

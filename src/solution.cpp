@@ -41,7 +41,7 @@ void Solution::free_var_entry()
 	for(int i = 0; i < free_var_num; i++)
 	{
 		printf("x%d: ", retrieve_var_num(pos + i));
-		scanf("%lf", &free_var(i, 0));
+		scanf("%lf", &free_var[i]);
 		printf("\n");
 	}
 }
@@ -62,13 +62,12 @@ bool Solution::test_sol(const Matrix<double> &a1, const Matrix<double> &f1) cons
 		return true;
 	}
 	double tmp;
-	printf("Проверка правильности решения\n");
 	double sum = 0, max = 0;
 	for(int i = 0; i < a1.n_rows; i++)
 	{
 		for(int j = 0; j < a1.n_cols; j++)
-			sum += a1(i, j) * sol(j, 0);
-		if((tmp = fabs(f1(i, 0) - sum)) > max)
+			sum += a1(i, j) * sol[j];
+		if((tmp = fabs(f1[i] - sum)) > max)
 			max = tmp;
 		sum = 0;
 	}
@@ -99,7 +98,7 @@ void Solution::print() const
 	{
 		printf("Решение системы:\n");
 		for(int i = 0; i < sol.n_rows; i++)
-			printf("%lf\n", sol(i, 0));
+			printf("%lf\n", sol[i]);
 	}
 }
 void Solution::sol_comp()
@@ -109,8 +108,8 @@ void Solution::sol_comp()
 	int i, j, k, cols = a.n_cols, pos = cols - free_var_num;
 	sol = f;
 	for(i = 0; i < free_var_num; i++)
-		sol(pos+i, 0) = free_var(i, 0);
+		sol(pos+i, 0) = free_var[i];
 	for(k = pos - 1; k >= 0; k--)
 		for(j = k+1; j < cols; j++)
-			sol(k, 0) -= sol(j, 0) * a(k, j);
+			sol[k] -= sol[j] * a(k, j);
 }

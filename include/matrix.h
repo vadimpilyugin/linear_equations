@@ -135,6 +135,9 @@ private:
 
 	// Const cast for writing public const fields.
 	template<typename T> inline T& make_rw(const T& val) const;	
+public:
+	ValueT & operator [] (int row) { return (*this)(row, 0); }
+	ValueT operator [] (int row) const { return (*this)(row, 0); }
 };
 
 // Output for matrix. Useful for debugging
@@ -147,9 +150,7 @@ std::ostream &operator << (std::ostream &out, const Matrix<ValueT> &m)
 	}
 	for (uint i = 0; i < m.n_rows; ++i) {
 		for (uint j = 0; j < m.n_cols; ++j) {
-			float a, b;
-			std::tie(a, b) = m(i, j);
-			out << "(" << a << ", " << b << ") ";
+			out << m(i, j) << ' ';
 		}
 		out << std::endl;
 	}

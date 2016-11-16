@@ -28,6 +28,8 @@ void Slau::swap_columns(int first, int second)
 	{
 		printf("Переставляем %d и %d столбцы:\n\n", first, second);
 		print();
+		printf("Запоминаем перестановку {%d, %d}\n", first, second);
+		printf("\n");
 	}
 }
 void Slau::swap_rows(int first, int second)
@@ -74,6 +76,7 @@ Solution Slau::gauss()
 {
 	int rows = a.n_rows, cols = a.n_cols;
 	int i, j, k, d = min(rows, cols);
+	if(debug) printf("Начинаем решение...\n");
 	vector<int> pos(2);
 	for(i = 0; i < d; i++)
 	{
@@ -81,21 +84,26 @@ Solution Slau::gauss()
 		if(fabs(a(pos[0], pos[1])) < eps)
 			break;
 		swap_columns(pos[1], i);
-		swap_columns(pos[0], i);
+		swap_rows(pos[0], i);
 		for(j = i + 1; j < cols; j++)
 			a(i, j) = a(i, j) / a(i, i);
-		f(i, 0) = f(i, 0) / a(i, i);
+		f[i] = f[i] / a(i, i);
+		a(i, i) = 1;
 		for(k = i+1; k < rows; k++)
 		{
 			for(j = i+1; j < cols; j++)
 				a(k, j) = a(k, j) - a(i, j) * a(k, i);
-			f(k, 0) = f(k, 0) - f(i, 0) * a(k, i);
+			f[k] = f[k] - f[i] * a(k, i);
 			a(k, i) = 0;
 		}
 		if(debug)
 		{
 			printf("Обнуляем %d столбец:\n\n", i);
 			print();
+			printf("===================\n");
+			printf("Закончили %d шаг.\n", i+1);
+			char c;
+			scanf("%c", &c);
 		}
 	}
 	;
@@ -105,7 +113,7 @@ Solution Slau::gauss()
 		{
 			for(i = d; i < rows; i++)
 			{
-				if(fabs(f(i, 0)) > eps)
+				if(fabs(f[i]) > eps)
 					return Solution(Solution::NO_SOL);
 			}
 			return Solution(Solution::ONLY_ONE, f, a, st);
@@ -119,7 +127,7 @@ Solution Slau::gauss()
 	{
 		k = i;
 		for(i = k; i < rows; i++)
-			if(fabs(f(i, 0)) > eps)
+			if(fabs(f[i]) > eps)
 				return Solution(Solution::NO_SOL);
 		return Solution(Solution::INF_MANY, f, a, st, cols - k);
 	}
@@ -132,7 +140,7 @@ void Slau::print() const
 	{
 		for(int j = 0; j < cols; j++)
 			printf("%5.2f  ", a(i, j));
-		printf("|  %5.2f\n", f(i, 0));
+		printf("|  %5.2f\n", f[i]);
 	}
 	printf("\n\n");
 }
