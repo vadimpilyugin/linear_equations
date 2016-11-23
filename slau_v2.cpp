@@ -36,6 +36,7 @@ public:
 	Matrix(int rows_n, int columns_n);
 	Matrix(): m(1), n(1) { a = new double * [1]; *a = new double [1]; **a = 0; }
 	Matrix(Matrix &&x): m(x.m), n(x.n) { a = x.a; x.a = nullptr; }
+	Matrix(ifstream &f);
 	void operator= (Matrix &&x);
 	void operator= (const Matrix &x);
 	Matrix(const Matrix &other);
@@ -485,8 +486,8 @@ void Solution::sol_comp()
  */
 class Slau
 {
-	Matrix a, a1;
-	Vector f, f1;
+	Matrix a, a2;
+	Vector f, f2;
 	Stack st;
 public:
 	Slau(int rows_n, int columns_n);
@@ -494,23 +495,30 @@ public:
 	Slau(const Matrix &m, const Vector &v): a(m), f(v) {}
 	void print() const;
 	Solution gauss();
-	const Matrix &get_a() const { return a1; }
-	const Vector &get_f() const { return f1; }
+	Matrix get_a() const { return a2; }
+	Vector get_f() const { return f2; }
 private:
 	void swap_columns(int first, int second);
 	void swap_rows(int first, int second);
+	void copy();
 };
 
 //==========================<Реализация>================================
-Slau::Slau(int rows_n, int columns_n): a(rows_n, columns_n), f(rows_n)
+Slau::Slau(int rows_n, int columns_n): a(rows_n, columns_n), a2(rows_n, columns_n), f(rows_n), f2(rows_n)
 {
 	for(int i = 1; i <= rows_n; i++)
 		f[i] = rand() % val_limit - val_limit/2;
-    Matrix tmp(a);
-    Vector tmp2(f);
-	a1 = {tmp};
-	f1 = {tmp2};
+	copy();
 }
+void Slau::copy()
+{
+	for(int i = 1; i <= a.get_m(); i++)
+    	f2[i] = f[i];
+    for(int i = 1; i <= a.get_m(); i++)
+    	for(int j = 1; j <= a.get_n(); j++)
+    		a2(i,j) = a(i,j);
+}
+
 Slau::Slau(ifstream &&file)
 {
 	int m, n, i, j;
@@ -518,6 +526,8 @@ Slau::Slau(ifstream &&file)
 	file >> m >> n;
 	a = Matrix(m, n);
 	f = Vector(m);
+	a2 = Matrix(m, n);
+	f2 = Vector(m);
 	for(i = 1; i <= m; i++)
 	{
 		for(j = 1; j <= n; j++)
@@ -525,10 +535,7 @@ Slau::Slau(ifstream &&file)
 		file >> delim;
 		file >> f[i];
 	}
-	Matrix tmp(a);
-    Vector tmp2(f);
-	a1 = {tmp};
-	f1 = {tmp2};
+	copy();
 }
 
 void Slau::print() const
@@ -628,8 +635,8 @@ Solution Slau::gauss()
 				return Solution(Solution::NO_SOL);
 		return Solution(move(f), move(a), move(st), Solution::INF_MANY, n - k + 1);
 	}
-	a = a1;
-	f = f1;
+	//a = a1;
+	//f = f1;
 }
 //==========================</Реализация>===============================
 
@@ -637,18 +644,18 @@ int main()
 {
 	srand(time(nullptr)); //инициализация ГСЧ
 	bool t = true;
-	//Slau s(ifstream("matrix1.txt"));  //ввод из файла
-	Slau s(100, 102); //заполняется случайными числами
-	//s.print();
+	Slau s(ifstream("matrix1.txt"));  //ввод из файла
+	//Slau s(100, 102); //заполняется случайными числами
+	s.print();
 	Solution sol(s.gauss());
 	sol.print();
 	t = sol.test_sol(s.get_a(), s.get_f());
 	/*
+
 	for(int i = 0; i < 20; i++)
 	{
-
-		Matrix *a = new Matrix(2, 6);
-		Vector *f = new Vector(2);
+		Matrix *a = new Matrix(10, 10);
+		Vector *f = new Vector(10);
 		Slau *s = new Slau(*a, *f);
 		printf("\n\n===============Система номер %d===================\n\n", i+1);
 		s -> print();
@@ -663,7 +670,7 @@ int main()
 	}*/
 	printf("Все хорошо? ");
 	if(t)
-		printf("Да");
+		printf("Да\n");
 	else
-		printf("Нет");
+		printf("Нет\n");
 }
