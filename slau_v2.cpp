@@ -648,14 +648,19 @@ int main()
 	//Slau s(100, 102); //заполняется случайными числами
 	s.print();
 	Solution sol(s.gauss());
-	sol.print();
-	t = sol.test_sol(s.get_a(), s.get_f());
+	for(int i = 0; i < 3; i++)
+	{
+		sol.print();
+		t = sol.test_sol(s.get_a(), s.get_f());
+		sol.recalculate();
+	}
+
 	/*
 
 	for(int i = 0; i < 20; i++)
 	{
-		Matrix *a = new Matrix(10, 10);
-		Vector *f = new Vector(10);
+		Matrix *a = new Matrix(2, 2);
+		Vector *f = new Vector(2);
 		Slau *s = new Slau(*a, *f);
 		printf("\n\n===============Система номер %d===================\n\n", i+1);
 		s -> print();
